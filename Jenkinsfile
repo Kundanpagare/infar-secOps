@@ -32,8 +32,8 @@ pipeline {
             steps {
  		    timeout(time: 4, unit: 'MINUTES') {
 	        	   sshagent(['app-key']) {
-                sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/infra-job/target/webgoat-server-v8.2.0-SNAPSHOT.jar app@65.2.9.102:WebGoat'
-		sh 'ssh -o  StrictHostKeyChecking=no app@65.2.9.102 "nohup java -jar /WebGoat/webgoat-server-v8.2.0-SNAPSHOT.jar --server.address=13.233.223.161 --server.port=9090 &"'
+                sh 'scp -o StrictHostKeyChecking=no /var/lib/jenkins/workspace/infra-job/target/webgoat-server-v8.2.0-SNAPSHOT.jar app@13.234.92.237:WebGoat'
+		sh 'ssh -o  StrictHostKeyChecking=no app@13.234.92.237 "nohup java -jar /WebGoat/webgoat-server-v8.2.0-SNAPSHOT.jar --server.address=13.233.223.161 --server.port=9090 &"'
  				
            		}
 		    }
@@ -42,8 +42,8 @@ pipeline {
 	
  	 stage ('Dynamic analysis') {
             steps {
-          	  sshagent(['Dast-key']) {
-            sh 'ssh -o  StrictHostKeyChecking=no ubuntu@43.205.127.255 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://65.2.9.102/WebGoat -x zap_report || true" '
+          	  sshagent(['dast-key']) {
+            sh 'ssh -o  StrictHostKeyChecking=no ubuntu@13.232.121.218 "sudo docker run --rm -v /home/ubuntu:/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://13.234.92.237/WebGoat -x zap_report || true" '
 			
                   }      
             }       
